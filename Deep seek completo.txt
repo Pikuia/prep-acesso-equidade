@@ -1,0 +1,833 @@
+Começo do projeto: 21/09 01:57 
+
+1 - Primeiro comando Deepseek:
+
+TENHO O SEGUINTE CENÁRIO, ESTOU FAZENDO UM PROJETO DA FACULDADE E A IDEIA FOI FALAR DE PROFILAXIA PRE EXPOSIÇÃO. COMO UM PRODUTO QUE DIMINUI A CONTAMINAÇÃO DE HIV E OUTRAS DOENÇAS SEXUALMENTE TRANSMISSÍVEIS. A IDEIA É CRIAR UM LOCAL ONDE SE TENHA OS DADOS DE DISTRIBUIÇÃO, QUE TENHO EM CSV APROXIMADAMENTE 500MB DE DADOS EM CSV. ATUALMENTE DESSE FORMATO:
+Cod_unificado,codigo_udm,nome_udm,cod_ibge_udm,dt_disp,UF_UDM,regiao_UDM,tp_servico_atendimento,tp_esquema_prep,tp_modalidade,Publico_privado_disp,tp_profissional,dt_disp_min,dt_disp_max,Disp_12m_2024,tp_testagem_hiv,IST_autorrelato
+101413564,359,SAE MARIA JOSÃ‰ ESTEVANATO - BARUERI,3505708,2024-09-25,SP,Sudeste,CTA,Esquema diÃ¡rio,PrEP diÃ¡ria,PÃºblico,Enfermeiro(a),2022-05-19,2024-09-25,Teve dispensaÃ§Ã£o em 2024,Teste rÃ¡pido,Nenhuma IST autorrelatada
+101413564,359,SAE MARIA JOSÃ‰ ESTEVANATO - BARUERI,3505708,2024-05-28,SP,Sudeste,ServiÃ§o Especializado,Esquema diÃ¡rio,PrEP diÃ¡ria,PÃºblico,Enfermeiro(a),2022-05-19,2024-09-25,Teve dispensaÃ§Ã£o em 2024,Teste rÃ¡pido,Nenhuma IST autorrelatada
+101413564,359,SAE MARIA JOSÃ‰ ESTEVANATO - BARUERI,3505708,2024-02-01,SP,Sudeste,CTA,Esquema diÃ¡rio,PrEP diÃ¡ria,PÃºblico,Enfermeiro(a),2022-05-19,2024-09-25,Teve dispensaÃ§Ã£o em 2024,Teste rÃ¡pido,Nenhuma IST autorrelatada
+101413564,359,SAE MARIA JOSÃ‰ ESTEVANATO - BARUERI,3505708,2023-11-08,SP,Sudeste,ServiÃ§o Especializado,Esquema diÃ¡rio,PrEP diÃ¡ria,PÃºblico,Enfermeiro(a),2022-05-19,2024-09-25,Teve dispensaÃ§Ã£o em 2024,Teste rÃ¡pido,Nenhuma IST autorrelatada
+101413564,359,SAE MARIA JOSÃ‰ ESTEVANATO - BARUERI,3505708,2023-09-21,SP,Sudeste,CTA,Esquema diÃ¡rio,PrEP diÃ¡ria,PÃºblico,Enfermeiro(a),2022-05-19,2024-09-25,Teve dispensaÃ§Ã£o em 2024,Teste rÃ¡pido,Nenhuma IST autorrelatada
+
+e TAMBÉM:
+
+Cod_unificado,codigo_ibge_resid,raca4_cat,escol4,fetar,Pop_genero_pratica,codigo_udm,nome_udm,cod_ibge_udm,st_momento_dispensa,dt_disp,UF_UDM,regiao_UDM,dt_disp_min,dt_disp_max,st_populacao_rua,st_privada_liberdade,Pop_prof_sexo,Pop_plan_rep,Pop_gestante,Pop_amamentacao,Disp_12m_2024,EmPrEP_2018,EmPrEP_2019,EmPrEP_2020,EmPrEP_2021,EmPrEP_2022,EmPrEP_2023,EmPrEP_2024
+101923991,3550308,Parda,12 ou mais anos,30 a 39,Gays e outros HSH cis,I17,ESTAÃ‡ÃƒO PREVENÃ‡ÃƒO JORGE BELOQUI - SPREPONLINE,3550308,Teve dispensa,2024-12-31,SP,Sudeste,2024-12-31,2024-12-31,NÃ£o,NÃ£o,NÃ£o,,,NÃ£o,Teve dispensaÃ§Ã£o em 2024,,,,,,,Em PrEP 2024
+101923974,3543402,Preta,Sem educaÃ§Ã£o formal a 3 anos,50 e mais,Homens heterossexuais cis,601,U. B. DISTRITAL DE SAÃšDE SIMIONI ALEXANDER FLEMING,3543402,Teve dispensa,2024-12-31,SP,Sudeste,2024-12-31,2024-12-31,NÃ£o,NÃ£o,NÃ£o,,,NÃ£o,Teve dispensaÃ§Ã£o em 2024,,,,,,,Em PrEP 2024
+101864895,3550308,Branca/Amarela,12 ou mais anos,18 a 24,Gays e outros HSH cis,I17,ESTAÃ‡ÃƒO PREVENÃ‡ÃƒO JORGE BELOQUI - SPREPONLINE,3550308,Teve dispensa,2024-12-31,SP,Sudeste,2024-09-02,2024-12-31,NÃ£o,NÃ£o,NÃ£o,,,NÃ£o,Teve dispensaÃ§Ã£o em 2024,,,,,,,Em PrEP 2024
+101907848,3550308,Branca/Amarela,12 ou mais anos,30 a 39,Gays e outros HSH cis,I17,ESTAÃ‡ÃƒO PREVENÃ‡ÃƒO JORGE BELOQUI - SPREPONLINE,3550308,Teve dispensa,2024-12-31,SP,Sudeste,2024-11-25,2024-12-31,NÃ£o,NÃ£o,NÃ£o,,,NÃ£o,Teve dispensaÃ§Ã£o em 2024,,,,,,,Em PrEP 2024
+
+PRECISO ATENDER OS SEGUINTES REQUISITOS:
+Desenvolver análise de dados em escala utilizando algum conjunto de dados existentes ou capturados por IoT e aprendizagem de máquina. Preparar uma interface para visualização dos resultados.
+
+SOU NOVO EM PROGRAMAÇÃO, MAS GOSTARIA DE FAZER ESSE PROGRAMA SIMPLES, ME EXPLIQUE PASSO A PASSO COMO FAZER. O OBJETIVO É FAZER ANALISE DE DISPENSA E PERFIL DE USUÁRIO QUE UTILIZA. VERSUS A PESQUISA ABERTA AO PUBLICO COM QUESTÕES RELEVANTES ( AS QUE DEIXEI COMO BASE OU POSSIVEIS IDEIAS DE QUESTOES RELEVANTES ) 
+
+PODEMOS USAR SUPABASE, GITHUB, TENHO POUCA EXPERIÊNCIA, MAS POSSO TENTAR NO PASSO A PASSO. ESSES PROGRAMAS CONSEGUI RODAS. QUERO ALGO SIMPLES E OBJETIVO.
+Vamos criar um projeto que atenda aos requisitos de forma simples e objetiva. O projeto terá duas partes principais:
+
+Análise dos dados de dispensação de PrEP: Vamos processar os dados fornecidos (em CSV) para extrair informações sobre a distribuição e o perfil dos usuários.
+
+Pesquisa de conhecimento sobre PrEP: Um formulário para coletar dados do público sobre o conhecimento e uso da PrEP.
+
+Além disso, vamos usar técnicas de aprendizado de máquina para agrupar os respondentes da pesquisa e comparar com os dados oficiais de dispensação.
+
+Vamos estruturar o projeto da seguinte forma:
+
+Backend: Utilizaremos o Supabase para armazenar as respostas da pesquisa. Para os dados de dispensação, como são grandes (500MB), vamos processá-los localmente e armazenar apenas agregados ou estatísticas no Supabase, ou então usar o próprio CSV carregado no aplicativo.
+
+Frontend: Uma aplicação Streamlit que permita:
+
+Coletar respostas da pesquisa e armazenar no Supabase.
+
+Fazer upload dos CSVs de dispensação e usuários (ou baixar de uma URL).
+
+Mostrar análises básicas dos dados de dispensação (por exemplo, distribuição por raça, faixa etária, etc.).
+
+Mostrar a análise das respostas da pesquisa (gráficos, estatísticas).
+
+Comparar os dados de dispensação (oferta) com as respostas da pesquisa (demanda/conhecimento) para identificar gaps.
+
+Dado que você é novo em programação, vamos manter as coisas o mais simples possível.
+
+Passo a Passo
+1. Configuração do Ambiente
+Instale o Python (versão 3.8 ou superior).
+
+Crie um ambiente virtual (opcional, mas recomendado).
+
+Instale as bibliotecas necessárias: streamlit, pandas, numpy, plotly, scikit-learn, supabase, python-dotenv.
+
+2. Configuração do Supabase
+Crie uma conta no Supabase.
+
+Crie um novo projeto e anote a URL e a chave de API.
+
+Crie uma tabela para armazenar as respostas da pesquisa. Use o SQL abaixo:
+
+sql
+CREATE TABLE respostas_prep (
+    id SERIAL PRIMARY KEY,
+    ts_utc TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()),
+    versao_form TEXT,
+    conhecimento_prep TEXT,
+    conhecimento_pep TEXT,
+    acesso_servicos TEXT,
+    fonte_informacao TEXT,
+    uso_preppep TEXT,
+    conhece_usuarios TEXT,
+    teste_hiv_freq TEXT,
+    metodos_prevencao TEXT,
+    genero TEXT,
+    orientacao_sexual TEXT,
+    raca TEXT,
+    faixa_etaria TEXT,
+    escolaridade TEXT,
+    renda TEXT,
+    regiao TEXT,
+    subprefeitura TEXT,
+    comentarios TEXT
+);
+3. Código da Aplicação Streamlit
+Vamos criar um arquivo chamado app_prep.py com as seguintes seções:
+
+Configuração inicial: Importar bibliotecas e configurar a página.
+
+Conexão com o Supabase: Funções para inserir e buscar respostas.
+
+Processamento dos CSVs de dispensação: Funções para ler e processar os dados.
+
+Formulário de pesquisa: Interface para coletar respostas.
+
+Visualizações: Gráficos e tabelas com os dados.
+
+4. Execução da Aplicação
+Execute a aplicação com streamlit run app_prep.py.
+
+5. Análise com Machine Learning
+Vamos usar o algoritmo K-Means para agrupar as respostas da pesquisa em clusters com padrões similares.
+
+Código Base
+Vou fornecer um código base que você pode usar como ponto de partida. Este código inclui:
+
+Formulário de pesquisa.
+
+Conexão com o Supabase.
+
+Upload de CSVs.
+
+Algumas visualizações básicas.
+
+Como os dados de dispensação são grandes, vamos focar em processá-los em memória e mostrar apenas resumos.
+
+Vamos começar com o código:
+
+python
+# -*- coding: utf-8 -*-
+import io, zipfile, requests
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import streamlit as st
+import statsmodels.api as sm
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.mixture import GaussianMixture
+from pandas.api import types as pdt
+from supabase_client import get_supabase
+
+st.set_page_config(page_title="PrEP — Oferta x Conhecimento (SP)", layout="wide")
+st.title("PrEP — Entre a Oferta e o Conhecimento (Município de São Paulo)")
+
+TABLE = "respostas_prep"
+URL_PREP_ZIP = "https://mediacenter.aids.gov.br/prep/Dados_PrEP_transparencia.zip"  # pode falhar por SSL
+COD_IBGE_SAO_PAULO = 3550308  # Filtro de município por código IBGE (SP)
+
+# ========================= BANCO (SUPABASE) =========================
+
+def insert_resposta(payload: dict) -> dict:
+    sb = get_supabase(backend=False)  # ANON para inserts (RLS libera)
+    valid = {"ts_utc","versao_form","conhecimento_prep","conhecimento_pep","acesso_servicos",
+             "fonte_informacao","uso_preppep","conhece_usuarios","teste_hiv_freq","metodos_prevencao",
+             "genero","orientacao_sexual","raca","faixa_etaria","escolaridade","renda",
+             "regiao","subprefeitura","comentarios"}
+    row = {k: v for k,v in payload.items() if k in valid and v is not None}
+    return sb.table(TABLE).insert(row).execute().model_dump()
+
+def fetch_respostas(limit: int = 10000) -> pd.DataFrame:
+    sb = get_supabase(backend=True)   # SERVICE ROLE (somente no servidor)
+    rows, start, page = [], 0, 1000
+    while True:
+        data = (sb.table(TABLE).select("*").order("ts_utc", desc=False).range(start, start+page-1)).execute().data
+        if not data: break
+        rows.extend(data)
+        start += page
+        if len(rows) >= limit or len(data) < page: break
+    return pd.DataFrame(rows)
+
+# ========================= DADOS PrEP (MS) =========================
+# Rotas: A) Upload CSVs; B) URL; C) ZIP oficial (pode falhar por SSL)
+
+def _uppercase_cols(df: pd.DataFrame) -> pd.DataFrame:
+    df.columns = [c.strip().upper() for c in df.columns]
+    return df
+
+def _harmonize_users_cols(df_users: pd.DataFrame) -> pd.DataFrame:
+    """Mapeia colunas segundo dicionário do MS para nomes canônicos."""
+    mapping = {
+        "RACA4_CAT": "RACA_COR",
+        "ESCOL4": "ESCOLARIDADE",
+        "FETAR": "FAIXA_ETARIA",
+        "POP_GENERO_PRATICA": "POPULACAO_CHAVE",
+        "COD_IBGE_UDM": "COD_IBGE_UDM",
+        "CODIGO_IBGE_RESID": "COD_IBGE_RESID",
+        "DT_DISP": "DT_DISP_MAX_SNAP"
+    }
+    for k,v in mapping.items():
+        if k in df_users.columns:
+            df_users[v] = df_users[k]
+    return df_users
+
+def _harmonize_disp_cols(df_disp: pd.DataFrame) -> pd.DataFrame:
+    """Padroniza dispensações: adiciona ANO."""
+    if "DT_DISP" in df_disp.columns:
+        df_disp["DT_DISP"] = pd.to_datetime(df_disp["DT_DISP"], errors="coerce")
+        df_disp["ANO"] = df_disp["DT_DISP"].dt.year
+    return df_disp
+
+def ms_from_upload(users_file, disp_file) -> tuple[pd.DataFrame, pd.DataFrame]:
+    df_users = _uppercase_cols(pd.read_csv(users_file, sep=None, engine="python"))
+    df_disp  = _uppercase_cols(pd.read_csv(disp_file,  sep=None, engine="python"))
+    df_users = _harmonize_users_cols(df_users)
+    df_disp  = _harmonize_disp_cols(df_disp)
+    # Filtro município SP — pelo serviço dispensador (UDM)
+    if "COD_IBGE_UDM" in df_disp.columns:
+        mask_sp = df_disp["COD_IBGE_UDM"].astype(str).str.startswith(str(COD_IBGE_SAO_PAULO)) | (df_disp["COD_IBGE_UDM"]==str(COD_IBGE_SAO_PAULO))
+        df_disp_sp = df_disp[mask_sp].copy()
+    else:
+        df_disp_sp = df_disp.copy()
+    return df_users, df_disp_sp
+
+def ms_from_urls(url_users: str, url_disp: str) -> tuple[pd.DataFrame, pd.DataFrame]:
+    r1 = requests.get(url_users, timeout=120); r1.raise_for_status()
+    r2 = requests.get(url_disp,  timeout=120); r2.raise_for_status()
+    return ms_from_upload(io.BytesIO(r1.content), io.BytesIO(r2.content))
+
+def ms_from_zip_official() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Tenta baixar o ZIP oficial do MS em memória (pode falhar por SSL)."""
+    r = requests.get(URL_PREP_ZIP, timeout=120)
+    r.raise_for_status()
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    names = [n for n in z.namelist() if n.lower().endswith(".csv")]
+    fn_users = next((n for n in names if "usuario" in n.lower()), None)
+    fn_disp  = next((n for n in names if "disp" in n.lower()), None)
+    if not fn_users or not fn_disp:
+        raise RuntimeError(f"Arquivos esperados não encontrados no ZIP: {names[:6]} ...")
+    df_users = _uppercase_cols(pd.read_csv(z.open(fn_users), sep=";", encoding="utf-8"))
+    df_disp  = _uppercase_cols(pd.read_csv(z.open(fn_disp),  sep=";", encoding="utf-8"))
+    df_users = _harmonize_users_cols(df_users)
+    df_disp  = _harmonize_disp_cols(df_disp)
+    if "COD_IBGE_UDM" in df_disp.columns:
+        mask_sp = df_disp["COD_IBGE_UDM"].astype(str).str.startswith(str(COD_IBGE_SAO_PAULO)) | (df_disp["COD_IBGE_UDM"]==str(COD_IBGE_SAO_PAULO))
+        df_disp = df_disp[mask_sp].copy()
+    return df_users, df_disp
+
+# ========================= PROXY (distribuição/positividade) =================
+
+def load_proxy_from_upload(file) -> pd.DataFrame:
+    # comment='#' ignora linhas que começarem com '#'
+    return pd.read_csv(file, sep=None, engine="python", comment='#')
+
+def load_proxy_from_url(url: str) -> pd.DataFrame:
+    r = requests.get(url, timeout=120); r.raise_for_status()
+    return pd.read_csv(io.BytesIO(r.content), sep=None, engine="python", comment='#')
+
+# ========================= ANÁLISE: OFERTA × DEMANDA × CONHECIMENTO =========
+
+def offer_counts_by_year_dim(df_users: pd.DataFrame, df_disp: pd.DataFrame, dim_col: str, year: int) -> pd.DataFrame:
+    """
+    Oferta = nº de usuários distintos com ao menos uma dispensação no ANO (por grupo).
+    Faz join para obter a dimensão do usuário (df_users).
+    Limitação: df_users é um 'snapshot' (última dispensa).
+    """
+    if "ANO" not in df_disp.columns or "COD_UNIFICADO" not in df_disp.columns:
+        raise ValueError("Dispensações precisam ter colunas ANO e COD_UNIFICADO.")
+    if dim_col not in df_users.columns:
+        raise ValueError(f"Dimensão {dim_col} não encontrada no banco de usuários.")
+    disp_y = df_disp[df_disp["ANO"]==year][["COD_UNIFICADO"]].dropna().drop_duplicates()
+    col_keep = ["COD_UNIFICADO", dim_col]
+    if "COD_UNIFICADO" not in df_users.columns:
+        df_users = df_users.rename(columns={c: "COD_UNIFICADO" for c in df_users.columns if c.strip()=="COD_UNIFICADO"})
+    users_y = disp_y.merge(df_users[col_keep], on="COD_UNIFICADO", how="left")
+    out = users_y.groupby(dim_col).size().rename("prep").reset_index()
+    out["ANO"] = year
+    return out
+
+def gap_with_ci(offer_df: pd.DataFrame, demand_df: pd.DataFrame, dim: str, ano: int) -> pd.DataFrame:
+    a = offer_df[offer_df["ANO"]==ano][[dim,"prep"]].copy()
+    b = demand_df[demand_df["ANO"]==ano][[dim,"COUNT"]].copy().rename(columns={"COUNT":"hiv"})
+    m = a.merge(b, on=dim, how="outer").fillna(0)
+    n1, n2 = m["prep"].sum(), m["hiv"].sum()
+    m["p1"] = m["prep"]/n1 if n1>0 else 0.0
+    m["p2"] = m["hiv"]/n2 if n2>0 else 0.0
+    m["gap_repr"] = m["p1"] - m["p2"]
+    se = np.sqrt((m["p1"]*(1-m["p1"])/max(n1,1)) + (m["p2"]*(1-m["p2"])/max(n2,1)))
+    z = 1.96
+    m["ci_low"] = m["gap_repr"] - z*se
+    m["ci_high"] = m["gap_repr"] + z*se
+    m["signif"] = np.where((m["ci_low"]>0)|(m["ci_high"]<0),"Significativo (95%)","Não significativo")
+    return m.sort_values("gap_repr")
+
+def harmonize_survey(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df['Conhecimento_PrEP_bin'] = df['conhecimento_prep'].map({
+        "Sim, conheço bem": 1, "Conheço parcialmente": 1,
+        "Já ouvi falar mas não sei detalhes": 0, "Não conheço": 0
+    }).astype('Int64')
+    df['Uso_PrEP_bin'] = df['uso_preppep'].map({"Sim, uso atualmente": 1}).fillna(0).astype(int)
+    if 'metodos_prevencao' in df.columns:
+        df.loc[df['metodos_prevencao'].fillna('').str.contains('PrEP', case=False), 'Uso_PrEP_bin'] = 1
+    for c in ['raca','faixa_etaria','escolaridade','genero','orientacao_sexual','regiao','subprefeitura']:
+        if c in df.columns: df[c] = df[c].astype(str).str.strip()
+    return df
+
+def logistic_or(df: pd.DataFrame, target: str, features: list[str]) -> pd.DataFrame:
+    data = df[[target]+features].dropna()
+    if data.empty: raise ValueError("Dados insuficientes.")
+    X = pd.get_dummies(data[features], drop_first=True)
+    X = sm.add_constant(X)
+    y = data[target].astype(int)
+    model = sm.Logit(y, X).fit(disp=0)
+    conf = model.conf_int()
+    out = pd.DataFrame({
+        "feature": model.params.index,
+        "OR": np.exp(model.params.values),
+        "CI_low": np.exp(conf[0].values),
+        "CI_high": np.exp(conf[1].values),
+        "pvalue": model.pvalues.values
+    })
+    return out.sort_values("OR", ascending=False)
+
+def latent_profiles(df: pd.DataFrame, cat_cols: list[str], k_range=range(2,6)):
+    enc = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+    Z = enc.fit_transform(df[cat_cols].astype(str))
+    best = {"bic": float('inf'), "k": None, "model": None}
+    for k in k_range:
+        gm = GaussianMixture(n_components=k, covariance_type='spherical', random_state=42).fit(Z)
+        bic = gm.bic(Z)
+        if bic < best["bic"]: best = {"bic": bic, "k": k, "model": gm}
+    labels = best["model"].predict(Z)
+    out = df.copy(); out["Perfil_Latente"] = labels
+    return out, best
+
+# ========================= INTERFACE =========================
+
+menu = st.sidebar.radio(
+    "Navegação",
+    ["Coleta (Pesquisa)", "Dados PrEP (MS)", "Proxy (distribuição)", "Oferta × Demanda × Conhecimento", "Modelos (ML)", "Sobre"]
+)
+
+# --- 1) Coleta ---
+if menu == "Coleta (Pesquisa)":
+    st.header("Formulário — conhecimento/uso de PrEP/PEP (grava no Supabase)")
+    with st.form("frm"):
+        col1, col2 = st.columns(2)
+        with col1:
+            q1 = st.radio("Você conhece a PrEP?", ["Sim, conheço bem","Conheço parcialmente","Já ouvi falar mas não sei detalhes","Não conheço"])
+            q2 = st.radio("E a PEP?", ["Sim, conheço bem","Conheço parcialmente","Já ouvi falar mas não sei detalhes","Não conheço"])
+            q3 = st.radio("Sabe onde conseguir PrEP/PEP em São Paulo?", ["Sim, conheço vários serviços","Conheço apenas um local","Não sei mas gostaria de saber","Não sei e não tenho interesse"])
+            q4 = st.selectbox("Como soube da PrEP/PEP?", ["Profissional de saúde","Amigos/conhecidos","Internet/redes sociais","Material informativo","Nunca ouvi falar","Outra"])
+            q5 = st.radio("Já usou/usa PrEP/PEP?", ["Sim, uso atualmente","Sim, já usei no passado","Não, mas pretendo usar","Não uso e não tenho interesse"])
+            q6 = st.radio("Conhece alguém que usa PrEP/PEP?", ["Sim, vários","Sim, alguns","Não conheço ninguém","Prefiro não responder"])
+        with col2:
+            q7 = st.radio("Frequência de teste de HIV", ["A cada 3 meses","A cada 6 meses","Uma vez por ano","Raramente faço","Nunca fiz","Prefiro não responder"])
+            genero = st.selectbox("Identidade de gênero", ["Mulher cisgênero","Homem cisgênero","Mulher trans","Homem trans","Pessoa não-binária","Travesti","Outro","Prefiro não responder"])
+            orient = st.selectbox("Orientação sexual", ["Assexual","Bissexual","Gay","Lésbica","Pansexual","Heterossexual","Queer","Outra","Prefiro não responder"])
+            raca = st.radio("Raça/cor", ["Amarela","Branca","Indígena","Parda","Preta","Prefiro não responder"])
+            faixa = st.radio("Faixa etária", ["13-17","18-24","25-29","30-39","40-49","50-59","60+","Prefiro não responder"])
+            escolar = st.selectbox("Escolaridade", ["Fundamental incompleto","Fundamental completo","Médio incompleto","Médio completo","Superior incompleto","Superior completo","Pós-graduação","Prefiro não responder"])
+            renda = st.radio("Renda mensal individual", ["Até 1 SM","1-2 SM","2-3 SM","3-5 SM","Mais de 5 SM","Prefiro não responder"])
+            regiao = st.selectbox("Região de residência em SP", ["Centro expandido","Zona Norte","Zona Sul","Zona Leste","Zona Oeste","Região Metropolitana","Não moro em S. Paulo","Prefiro não responder"])
+            subpref = st.text_input("Subprefeitura (opcional)")
+            metodos = st.multiselect("Métodos de prevenção", ["PrEP","PEP","Camisinha masculina","Camisinha feminina","Testagem regular","Não utilizo","Outro"])
+            comentarios = st.text_area("Comentários (opcional)", height=70)
+        enviado = st.form_submit_button("Enviar")
+    if enviado:
+        payload = {
+            "versao_form": "v1",
+            "conhecimento_prep": q1, "conhecimento_pep": q2,
+            "acesso_servicos": q3, "fonte_informacao": q4,
+            "uso_preppep": q5, "conhece_usuarios": q6,
+            "teste_hiv_freq": q7, "genero": genero, "orientacao_sexual": orient,
+            "raca": raca, "faixa_etaria": faixa, "escolaridade": escolar, "renda": renda,
+            "regiao": regiao, "subprefeitura": (subpref or None),
+            "metodos_prevencao": ", ".join(metodos) if metodos else None,
+            "comentarios": (comentarios or None),
+        }
+        _ = insert_resposta(payload)
+        st.success("✅ Resposta registrada!")
+    st.divider()
+    df = fetch_respostas()
+    st.caption(f"Total de respostas armazenadas: {len(df)}")
+    st.dataframe(df.tail(30), use_container_width=True)
+
+# --- 2) Dados PrEP (MS) ---
+elif menu == "Dados PrEP (MS)":
+    st.header("Carregar dados PrEP do MS (sem CSV local, ou via CSV de apoio)")
+    tabs = st.tabs(["A) Upload CSVs", "B) URLs remotas", "C) ZIP oficial (tentativa)"])
+
+    # A) Upload
+    with tabs[0]:
+        uf  = st.file_uploader("Banco_PrEP_usuarios.csv",  type=["csv"], key="u1")
+        dfp = st.file_uploader("Banco_PrEP_dispensas.csv", type=["csv"], key="u2")
+        if st.button("Carregar (upload)"):
+            if uf and dfp:
+                try:
+                    users, disp = ms_from_upload(uf, dfp)
+                    st.session_state["MS_USERS"] = users
+                    st.session_state["MS_DISP"]  = disp
+                    st.success(f"OK! Usuários: {len(users):,} | Dispensas (SP): {len(disp):,}")
+                    st.dataframe(users.head(20), use_container_width=True)
+                    st.dataframe(disp.head(20),  use_container_width=True)
+                except Exception as e:
+                    st.error(f"Erro ao processar CSVs: {e}")
+            else:
+                st.warning("Envie os dois arquivos.")
+
+    # B) URLs
+    with tabs[1]:
+        url_users = st.text_input("URL - Banco_PrEP_usuarios.csv")
+        url_disp  = st.text_input("URL - Banco_PrEP_dispensas.csv")
+        if st.button("Carregar (URLs)"):
+            try:
+                users, disp = ms_from_urls(url_users, url_disp)
+                st.session_state["MS_USERS"] = users
+                st.session_state["MS_DISP"]  = disp
+                st.success(f"OK! Usuários: {len(users):,} | Dispensas (SP): {len(disp):,}")
+            except Exception as e:
+                st.error(f"Falha ao baixar pelas URLs: {e}")
+
+    # C) ZIP oficial
+    with tabs[2]:
+        st.info("Tentativa de baixar o ZIP oficial (pode falhar se o certificado SSL do servidor estiver vencido).")
+        if st.button("Baixar ZIP oficial (em memória)"):
+            try:
+                users, disp = ms_from_zip_official()
+                st.session_state["MS_USERS"] = users
+                st.session_state["MS_DISP"]  = disp
+                st.success(f"OK! Usuários: {len(users):,} | Dispensas (SP): {len(disp):,}")
+                st.caption("Fonte: Painel PrEP — Ministério da Saúde (link público para o ZIP).")
+            except requests.exceptions.SSLError:
+                st.error("Falha SSL no servidor oficial (certificado expirado). Use Upload ou URLs dos seus CSVs.")
+            except Exception as e:
+                st.error(f"Erro ao baixar/processar ZIP: {e}")
+
+# --- 3) Proxy ---
+elif menu == "Proxy (distribuição)":
+    st.header("Proxy de necessidade (incidência/positividade) — use upload ou URL remota")
+    colA, colB = st.columns(2)
+    with colA:
+        fp = st.file_uploader("CSV de proxy (ANO, DIM, COUNT) ou tidy (ANO,DIM_TIPO,DIM_VALOR,COUNT)", type=["csv"], key="p1")
+        if st.button("Carregar (upload)"):
+            if fp:
+                try:
+                    dfp = load_proxy_from_upload(fp)
+                    st.session_state["PROXY"] = dfp
+                    st.success(f"Proxy carregado ({len(dfp):,} linhas).")
+                    st.dataframe(dfp.head(20), use_container_width=True)
+                except Exception as e:
+                    st.error(f"Erro no proxy (upload): {e}")
+            else:
+                st.warning("Envie o CSV do proxy.")
+    with colB:
+        urlp = st.text_input("URL remota do CSV de proxy")
+        if st.button("Carregar (URL)"):
+            try:
+                dfp = load_proxy_from_url(urlp)
+                st.session_state["PROXY"] = dfp
+                st.success(f"Proxy carregado ({len(dfp):,} linhas).")
+                st.dataframe(dfp.head(20), use_container_width=True)
+            except Exception as e:
+                st.error(f"Erro no proxy (URL): {e}")
+
+# --- 4) Oferta × Demanda × Conhecimento ---
+elif menu == "Oferta × Demanda × Conhecimento":
+    st.header("Oferta (PrEP) × Demanda (proxy) × Conhecimento (pesquisa)")
+    users = st.session_state.get("MS_USERS")
+    disp  = st.session_state.get("MS_DISP")
+    prox  = st.session_state.get("PROXY")
+    if users is None or disp is None:
+        st.warning("Carregue os dados PrEP (aba 'Dados PrEP (MS)') via Upload/URL.")
+    if prox is None:
+        st.warning("Carregue o proxy (aba 'Proxy (distribuição)').")
+
+    if (users is not None) and (disp is not None) and (prox is not None):
+        dims_ok = [c for c in ["RACA_COR","FAIXA_ETARIA","ESCOLARIDADE","POPULACAO_CHAVE"] if c in users.columns]
+        if not dims_ok:
+            st.error("Não encontrei colunas de dimensão esperadas nos dados de usuários (ver dicionário do MS).")
+        else:
+            dim = st.selectbox("Dimensão", dims_ok)
+            anos = disp["ANO"].dropna().astype(int).unique()
+            ano  = st.selectbox("Ano", sorted(anos), index=len(anos)-1)
+
+            # Suporte ao arquivo único 'tidy': ANO, DIM_TIPO, DIM_VALOR, COUNT
+            if {'DIM_TIPO','DIM_VALOR','ANO','COUNT'}.issubset(set(prox.columns)):
+                prox_work = prox[prox['DIM_TIPO'] == dim].rename(columns={'DIM_VALOR': dim}).copy()
+            else:
+                prox_work = prox.copy()
+
+            # Escolha de colunas (funciona tanto para tidy quanto para CSV simples)
+            prox_cols = prox_work.columns.tolist()
+            col_dim = st.selectbox("Coluna DIM no proxy", prox_cols, index=prox_cols.index(dim) if dim in prox_cols else min(1,len(prox_cols)-1))
+            col_ano = st.selectbox("Coluna ANO no proxy", prox_cols, index=prox_cols.index("ANO") if "ANO" in prox_cols else 0)
+            col_cnt = st.selectbox("Coluna COUNT no proxy", prox_cols, index=prox_cols.index("COUNT") if "COUNT" in prox_cols else min(2,len(prox_cols)-1))
+
+            # Padroniza nomes
+            prox_std = prox_work.rename(columns={col_dim: dim, col_ano: "ANO", col_cnt: "COUNT"}).copy()
+
+            # --- Patch robusto para garantir Series e strings na coluna de dimensão ---
+            obj = prox_std[dim]
+            if isinstance(obj, pd.DataFrame):
+                prox_std[dim] = obj.iloc[:, 0]
+            else:
+                prox_std[dim] = obj
+            if pdt.is_object_dtype(prox_std[dim]) or pdt.is_string_dtype(prox_std[dim]):
+                prox_std[dim] = prox_std[dim].astype(str).str.strip()
+
+            try:
+                offer = offer_counts_by_year_dim(users, disp, dim_col=dim, year=int(ano))
+Este código é apenas um esqueleto. Você precisará ajustar e completar conforme necessário.
+
+6. Arquivo de Requisitos (requirements.txt)
+Crie um arquivo requirements.txt com:
+
+text
+streamlit
+pandas
+plotly
+requests
+scikit-learn
+statsmodels
+supabase==2.6.0
+python-dotenv==1.0.1
+7. Cliente Supabase (supabase_client.py)
+Crie um arquivo supabase_client.py para gerenciar a conexão com o Supabase:
+
+python
+# supabase_client.py
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from supabase import create_client, Client
+
+# tenta carregar .env no diretório do script; se não achar, tenta no CWD
+here = Path(__file__).resolve().parent
+env_file = here / ".env"
+if env_file.exists():
+    load_dotenv(env_file)
+else:
+    load_dotenv()
+
+def get_supabase(backend: bool = False) -> Client:
+    """
+    backend=False -> ANON (inserts do formulário, respeitando RLS)
+    backend=True  -> SERVICE ROLE (leituras/ML no servidor)
+    """
+    url = os.environ["SUPABASE_URL"]
+    key = os.environ["SUPABASE_SERVICE_ROLE_KEY" if backend else "SUPABASE_ANON_KEY"]
+    return create_client(url, key)
+8. Variáveis de Ambiente (.env)
+Crie um arquivo .env na pasta do projeto com:
+
+text
+SUPABASE_URL=sua_url_do_supabase
+SUPABASE_ANON_KEY=sua_chave_anon
+SUPABASE_SERVICE_ROLE_KEY=sua_chave_service_role
+9. Execução
+Execute o aplicativo com streamlit run app_prep.py.
+
+Considerações Finais
+Este é um projeto complexo, mas espero que este guia passo a passo ajude. Lembre-se de que você pode ajustar o código conforme suas necessidades e limitações. Se encontrar problemas, não hesite em procurar ajuda na documentação das bibliotecas ou em fóruns de programação.
+
+Boa sorte com seu projeto!
+
+Projeto PrEP: Análise de Dados de Dispensação e Pesquisa de Conhecimento
+Vou criar um projeto completo e simples para análise dos dados de PrEP, atendendo aos requisitos do seu trabalho da faculdade. Como você é novo em programação, vou explicar passo a passo.
+
+Visão Geral do Projeto
+Vamos criar um sistema que:
+
+Importa e analisa os dados de dispensação de PrEP (os CSVs que você tem)
+
+Coleta pesquisas sobre conhecimento de PrEP através de um formulário
+
+Compara os dados oficiais com as respostas da pesquisa
+
+Gera visualizações e insights
+
+Passo a Passo
+1. Configuração do Ambiente
+Primeiro, vamos configurar o ambiente de desenvolvimento:
+
+Instale o Python (versão 3.8 ou superior) do site oficial
+
+Crie uma pasta para o projeto (ex: projeto_prep)
+
+Abra o terminal/command prompt e navegue até esta pasta
+
+Crie um ambiente virtual: python -m venv venv
+
+Ative o ambiente virtual:
+
+Windows: venv\Scripts\activate
+
+Mac/Linux: source venv/bin/activate
+
+Instale as dependências: pip install streamlit pandas numpy matplotlib seaborn
+
+2. Estrutura de Arquivos
+Crie os seguintes arquivos na pasta do projeto:
+
+text
+projeto_prep/
+├── app.py                 # Aplicação principal
+├── data_loader.py         # Para carregar os CSVs
+├── requirements.txt       # Dependências do projeto
+└── data/                  # Pasta para os arquivos CSV (opcional)
+3. Código Principal
+Vamos começar com um aplicativo Streamlit simples que pode lidar com seus dados:
+
+app.py:
+
+python
+import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from datetime import datetime
+import os
+
+# Configuração da página
+st.set_page_config(
+    page_title="Análise PrEP - São Paulo",
+    page_icon="🏥",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Título da aplicação
+st.title("Análise de Dados de PrEP - São Paulo")
+st.markdown("""
+Esta aplicação analisa dados de dispensação de PrEP e pesquisa de conhecimento sobre prevenção ao HIV.
+""")
+
+# Menu lateral
+menu = st.sidebar.selectbox(
+    "Menu",
+    ["Início", "Carregar Dados", "Análise de Dispensação", "Pesquisa de Conhecimento", "Resultados"]
+)
+
+# Seção inicial
+if menu == "Início":
+    st.header("Bem-vindo ao Sistema de Análise de PrEP")
+    st.markdown("""
+    ### Funcionalidades:
+    - 📊 Análise dos dados de dispensação de PrEP
+    - 📝 Pesquisa sobre conhecimento de PrEP na população
+    - 📈 Visualização comparativa entre oferta e demanda
+    - 🤖 Análise com técnicas de machine learning
+    """)
+    
+    st.info("Use o menu lateral para navegar entre as seções.")
+
+# Carregar dados
+elif menu == "Carregar Dados":
+    st.header("Carregar Dados de Dispensação")
+    
+    uploaded_file = st.file_uploader(
+        "Escolha o arquivo CSV de dispensação", 
+        type=['csv'],
+        help="Selecione o arquivo com os dados de dispensação de PrEP"
+    )
+    
+    if uploaded_file is not None:
+        try:
+            # Lê o arquivo CSV
+            df = pd.read_csv(uploaded_file)
+            st.session_state.dispensacao_df = df
+            
+            st.success("Dados carregados com sucesso!")
+            st.write(f"Total de registros: {len(df)}")
+            
+            # Mostra visualização preliminar
+            st.subheader("Visualização dos Dados (primeiras 10 linhas)")
+            st.dataframe(df.head(10))
+            
+            # Estatísticas básicas
+            st.subheader("Estatísticas Básicas")
+            st.write(df.describe())
+            
+        except Exception as e:
+            st.error(f"Erro ao carregar arquivo: {str(e)}")
+
+# Análise de dispensação
+elif menu == "Análise de Dispensação":
+    st.header("Análise dos Dados de Dispensação")
+    
+    if 'dispensacao_df' not in st.session_state:
+        st.warning("Por favor, carregue os dados primeiro na seção 'Carregar Dados'.")
+    else:
+        df = st.session_state.dispensacao_df
+        
+        # Selecionar tipo de análise
+        analise_tipo = st.selectbox(
+            "Selecione o tipo de análise",
+            ["Visão Geral", "Por Perfil Demográfico", "Por Região", "Por Período"]
+        )
+        
+        if analise_tipo == "Visão Geral":
+            st.subheader("Visão Geral da Dispensação")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Contagem por raça/cor
+                if 'raca4_cat' in df.columns:
+                    st.write("**Distribuição por Raça/Cor**")
+                    contagem_raca = df['raca4_cat'].value_counts()
+                    fig, ax = plt.subplots()
+                    ax.pie(contagem_raca.values, labels=contagem_raca.index, autopct='%1.1f%%')
+                    st.pyplot(fig)
+            
+            with col2:
+                # Contagem por faixa etária
+                if 'fetar' in df.columns:
+                    st.write("**Distribuição por Faixa Etária**")
+                    contagem_idade = df['fetar'].value_counts()
+                    st.bar_chart(contagem_idade)
+        
+        elif analise_tipo == "Por Perfil Demográfico":
+            st.subheader("Análise por Perfil Demográfico")
+            
+            # Selecionar variáveis para análise
+            var_x = st.selectbox("Selecione a variável para o eixo X", df.columns)
+            var_y = st.selectbox("Selecione a variável para o eixo Y", df.columns)
+            
+            if st.button("Gerar Gráfico"):
+                try:
+                    fig, ax = plt.subplots()
+                    df_grouped = df.groupby(var_x)[var_y].count()
+                    ax.bar(df_grouped.index, df_grouped.values)
+                    ax.set_xticklabels(df_grouped.index, rotation=45)
+                    st.pyplot(fig)
+                except Exception as e:
+                    st.error(f"Erro ao gerar gráfico: {str(e)}")
+
+# Pesquisa de conhecimento
+elif menu == "Pesquisa de Conhecimento":
+    st.header("Pesquisa de Conhecimento sobre PrEP")
+    
+    with st.form("pesquisa_form"):
+        st.subheader("Formulário de Pesquisa")
+        
+        # Dados demográficos
+        st.write("**Informações Demográficas**")
+        idade = st.slider("Idade", 18, 80, 25)
+        genero = st.selectbox("Gênero", ["Masculino", "Feminino", "Não-binário", "Prefiro não informar"])
+        raca = st.selectbox("Raça/Cor", ["Branca", "Preta", "Parda", "Amarela", "Indígena", "Prefiro não informar"])
+        regiao = st.selectbox("Região de São Paulo", 
+                             ["Centro", "Zona Norte", "Zona Sul", "Zona Leste", "Zona Oeste", "Outra"])
+        
+        # Conhecimento sobre PrEP
+        st.write("**Conhecimento sobre PrEP**")
+        conhece_prep = st.radio("Você conhece a PrEP?", ["Sim", "Não", "Já ouvi falar mas não sei detalhes"])
+        
+        if conhece_prep != "Não":
+            onde_soube = st.multiselect("Onde você soube sobre a PrEP?", 
+                                       ["Profissional de saúde", "Amigos", "Internet", "TV/rádio", "Outros"])
+            conhece_onde = st.radio("Sabe onde conseguir PrEP?", ["Sim", "Não"])
+        
+        # Comportamento preventivo
+        st.write("**Comportamento Preventivo**")
+        fez_testagem = st.radio("Já fez testagem para HIV?", ["Sim", "Não", "Prefiro não responder"])
+        uso_prevencao = st.multiselect("Quais métodos de prevenção você utiliza?",
+                                      ["Camisinha", "PrEP", "PEP", "Testagem regular", "Não utilizo"])
+        
+        # Envio do formulário
+        submitted = st.form_submit_button("Enviar Resposta")
+        
+        if submitted:
+            # Aqui você pode salvar as respostas em um arquivo ou banco de dados
+            st.success("Obrigado por participar da pesquisa! Sua resposta foi registrada.")
+
+# Resultados
+elif menu == "Resultados":
+    st.header("Resultados e Análises")
+    
+    st.write("Em desenvolvimento...")
+    
+    # Aqui você pode adicionar comparações entre os dados oficiais e a pesquisa
+    # e aplicar técnicas simples de machine learning como agrupamento (clustering)
+
+if __name__ == "__main__":
+    # Esta linha não é necessária para o Streamlit, mas é boa prática
+    pass
+requirements.txt:
+
+text
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+4. Executando a Aplicação
+Salve os arquivos na pasta do projeto
+
+No terminal, com o ambiente virtual ativado, execute: streamlit run app.py
+
+O aplicativo abrirá automaticamente no navegador
+
+5. Próximos Passos e Melhorias
+Para evoluir o projeto, você pode:
+
+Conectar com Supabase:
+
+Crie uma conta em Supabase
+
+Crie uma nova tabela para armazenar as respostas da pesquisa
+
+Use a biblioteca supabase para Python para salvar os dados
+
+Análise mais Avançada:
+
+Implemente algoritmos de clustering para agrupar respondentes
+
+Compare os dados oficiais com as respostas da pesquisa
+
+Identifique gaps entre oferta e conhecimento
+
+Otimização para Grandes Volumes:
+
+Para lidar com CSVs grandes, use a opção chunksize do pandas
+
+Considere usar uma base de dados local como SQLite
+
+Implante o Projeto:
+
+Use o GitHub para versionamento
+
+Deploy no Streamlit Cloud ou Heroku
+
+Explicação das Escolhas
+Streamlit: Framework simples para criar aplicações web com Python, ideal para iniciantes
+
+Pandas: Biblioteca essencial para manipulação e análise de dados
+
+Visualizações simples: Gráficos de barras e pizza para facilitar a compreensão
+
+Formulário integrado: Para coletar dados diretamente na aplicação
+
+Este projeto oferece uma base sólida que você pode expandir conforme ganha mais experiência. Comece com esta versão simples e depois adicone funcionalidades gradualmente.
+
+Precisa de ajuda com alguma parte específica?
+

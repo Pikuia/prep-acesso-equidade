@@ -1,0 +1,14 @@
+streamlit
+pandas
+plotly
+requests
+scikit-learn
+statsmodels
+supabase==2.6.0
+python-dotenv==1.0.1
+numpy
+matplotlib
+seaborn
+openpyxl
+xlrd
+plotly
