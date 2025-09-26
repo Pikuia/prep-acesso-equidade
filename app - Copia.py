@@ -193,117 +193,6 @@ def analise_avancada_publico(df_usuarios):
     fig = px.bar(feature_importance_df, x='importance', y='feature', orientation='h', title='Top 15 Fatores que Influenciam a Retenção')
     st.plotly_chart(fig, use_container_width=True)
 
-def analise_indicadores_hiv(df_indicadores):
-    """Processa o arquivo Excel de indicadores e exibe gráficos sobre HIV/AIDS."""
-    st.subheader("Gráficos sobre HIV/AIDS no Brasil (Dados Nacionais)")
-    st.info("Estes gráficos são baseados nos dados nacionais do arquivo `indicadoresAids.xls` e **não são afetados pelo filtro de estado (SP)**.")
-
-    if not df_indicadores:
-        st.warning("Não foi possível carregar os dados dos indicadores para gerar os gráficos.")
-        return
-
-    # Tenta usar a aba 'Boletim', se não encontrar, usa a primeira disponível
-    sheet_name_to_use = 'Boletim'
-    if sheet_name_to_use not in df_indicadores:
-        first_sheet_name = list(df_indicadores.keys())[0]
-        st.warning(f"A aba 'Boletim' não foi encontrada. Analisando a primeira aba: '{first_sheet_name}'.")
-        sheet_name_to_use = first_sheet_name
-
-    df_sheet = df_indicadores[sheet_name_to_use]
-
-    # Helper function to find the start row of a table by its title
-    def find_table_start(df, title_keyword):
-        for idx, row in df.iterrows():
-            if row.astype(str).str.contains(title_keyword, case=False, na=False).any():
-                return idx
-        return None
-
-    # --- Gráfico 1: Casos de Aids por ano ---
-    st.markdown("---")
-    try:
-        start_row = find_table_start(df_sheet, "Tabela 1 - Casos de aids")
-        if start_row is not None:
-            header_row = df_sheet.iloc[start_row + 1]
-            tabela1 = df_sheet.iloc[start_row + 2 : start_row + 5].copy()
-            tabela1.columns = header_row
-            
-            tabela1 = tabela1.set_index(tabela1.columns[0])
-            tabela1.index.name = "Categoria"
-            
-            tabela1 = tabela1.drop(columns=['Total', '1980-2012'], errors='ignore')
-            
-            anos_colunas = [col for col in tabela1.columns if isinstance(col, (int, float)) and 2013 <= col <= 2023]
-            tabela1 = tabela1[anos_colunas].T
-            tabela1.index = tabela1.index.astype(int).astype(str)
-            tabela1.index.name = "Ano"
-            tabela1 = tabela1.astype(float)
-            
-            tabela1 = tabela1.rename(columns={'Total': 'Total de Casos', 'Masculino': 'Masculino', 'Feminino': 'Feminino'})
-            
-            st.markdown("#### Evolução dos Casos de AIDS no Brasil (2013-2023)")
-            fig = px.line(tabela1, x=tabela1.index, y=tabela1.columns, title="Novos Casos de AIDS por Ano", labels={'value': 'Número de Casos', 'variable': 'Legenda'})
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            raise ValueError("Tabela 1 não encontrada.")
-    except Exception:
-        st.warning("Não foi possível gerar o gráfico de 'Evolução dos Casos de AIDS'. Verifique o formato do arquivo Excel.")
-
-
-    # --- Gráfico 2: Óbitos por Aids por ano ---
-    st.markdown("---")
-    try:
-        start_row_obitos = find_table_start(df_sheet, "Tabela 7 - Óbitos por causa básica aids")
-        if start_row_obitos is not None:
-            header = df_sheet.iloc[start_row_obitos + 1]
-            dados_obitos = df_sheet.iloc[start_row_obitos + 2]
-            
-            df_obitos = pd.DataFrame(data=[dados_obitos.values], columns=header.values).T.reset_index()
-            df_obitos.columns = ['Variavel', 'Valor']
-            df_obitos = df_obitos[df_obitos['Variavel'].astype(str).str.match(r'^\d{4}(\.0)?$')]
-            df_obitos = df_obitos[(df_obitos['Variavel'] >= 2013) & (df_obitos['Variavel'] <= 2023)]
-            df_obitos.columns = ['Ano', 'Óbitos']
-            df_obitos['Ano'] = df_obitos['Ano'].astype(int).astype(str)
-            df_obitos['Óbitos'] = pd.to_numeric(df_obitos['Óbitos'])
-
-            st.markdown("#### Evolução dos Óbitos por AIDS no Brasil (2013-2023)")
-            fig_obitos = px.bar(df_obitos, x='Ano', y='Óbitos', title='Número de Óbitos Anuais por AIDS')
-            st.plotly_chart(fig_obitos, use_container_width=True)
-        else:
-            raise ValueError("Tabela 7 não encontrada.")
-    except Exception:
-        st.warning("Não foi possível gerar o gráfico de 'Óbitos por AIDS'. Verifique o formato do arquivo Excel.")
-
-    # --- Gráfico 3: Casos por Raça/Cor em 2023 ---
-    st.markdown("---")
-    try:
-        start_row_raca = find_table_start(df_sheet, "Tabela 8 - Casos de aids notificados no Sinan, segundo raça/cor")
-        if start_row_raca is not None:
-            header_raca = df_sheet.iloc[start_row_raca + 1]
-            dados_raca = df_sheet.iloc[start_row_raca + 2 : start_row_raca + 7].copy()
-            dados_raca.columns = header_raca
-            
-            dados_raca = dados_raca.set_index(dados_raca.columns[0])
-            dados_2023 = dados_raca[[2023.0]].copy() # O cabeçalho pode ser float
-            dados_2023.columns = ['Casos em 2023']
-            dados_2023 = dados_2023.reset_index()
-            dados_2023.columns = ['Raça/Cor', 'Casos em 2023']
-            dados_2023['Casos em 2023'] = pd.to_numeric(dados_2023['Casos em 2023'])
-
-            st.markdown("#### Distribuição de Casos de AIDS por Raça/Cor (2023)")
-            fig_raca = px.pie(dados_2023, names='Raça/Cor', values='Casos em 2023', title='Distribuição de Casos por Raça/Cor em 2023', hole=0.3)
-            st.plotly_chart(fig_raca, use_container_width=True)
-        else:
-            raise ValueError("Tabela 8 não encontrada.")
-    except Exception:
-        st.warning("Não foi possível gerar o gráfico de 'Casos por Raça/Cor'. Verifique o formato do arquivo Excel.")
-
-
-    with st.expander("Visualizar todas as tabelas originais do arquivo 'indicadoresAids.xls'"):
-        for sheet_name, df_sheet_raw in df_indicadores.items():
-            st.write(f"Dados da aba: {sheet_name}")
-            df_cleaned = df_sheet_raw.dropna(how='all').dropna(axis=1, how='all')
-            st.dataframe(df_cleaned)
-
 # ======================= INTERFACE DO APP =======================
 
 def mostrar_termo_consentimento():
@@ -431,8 +320,8 @@ def mostrar_dados_oficiais():
         return 
 
     st.markdown("---")
-    st.info("💡 Use o filtro abaixo para visualizar os dados de usuários e dispensas de PrEP apenas do estado de São Paulo.")
-    filtro_sp = st.toggle("Mostrar apenas dados de PrEP de São Paulo (SP)", help="Ative para filtrar os dados da PrEP para o estado de SP.")
+    st.info("💡 Use o filtro abaixo para visualizar os dados de usuários e dispensas apenas do estado de São Paulo.")
+    filtro_sp = st.toggle("Mostrar apenas dados de São Paulo (SP)", help="Ative para filtrar os dados da PrEP para o estado de SP.")
 
     df_usuarios_filtrado = df_usuarios.copy()
     df_dispensas_filtrado = df_dispensas.copy()
@@ -442,7 +331,7 @@ def mostrar_dados_oficiais():
             df_usuarios_filtrado = df_usuarios[df_usuarios['UF_UDM'] == 'SP']
         if 'UF_UDM' in df_dispensas.columns:
             df_dispensas_filtrado = df_dispensas[df_dispensas['UF_UDM'] == 'SP']
-        st.success(f"Filtro aplicado! Mostrando dados de PrEP de São Paulo.")
+        st.success(f"Filtro aplicado! Mostrando dados de São Paulo.")
 
     tab1, tab2, tab3, tab4 = st.tabs([
         "👤 Perfil dos Usuários de PrEP", 
@@ -508,8 +397,15 @@ def mostrar_dados_oficiais():
             st.warning("Não há dados de usuários para realizar a análise avançada. Desative o filtro de SP se necessário.")
 
     with tab4:
-        analise_indicadores_hiv(df_indicadores)
-
+        st.subheader("Indicadores de HIV/AIDS (Ministério da Saúde)")
+        if df_indicadores:
+            st.info("Estes são os dados extraídos do arquivo 'indicadoresAids.xls'.")
+            for sheet_name, df_sheet in df_indicadores.items():
+                with st.expander(f"Visualizar Tabela: {sheet_name}"):
+                    df_cleaned = df_sheet.dropna(how='all').dropna(axis=1, how='all')
+                    st.dataframe(df_cleaned)
+        else:
+            st.warning("Não foi possível carregar os dados dos indicadores.")
 
 # ======================= FUNÇÃO PRINCIPAL =======================
 def main():

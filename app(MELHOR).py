@@ -34,6 +34,9 @@ def criar_banco():
         conhecimento_prep TEXT,
         uso_prep TEXT,
         acesso_servico TEXT,
+        fonte_info TEXT,
+        barreiras TEXT,
+        percepcao_risco TEXT,
         comentarios TEXT
     )
     ''')
@@ -47,8 +50,8 @@ def salvar_resposta(resposta):
     cursor.execute('''
     INSERT INTO respostas 
     (idade, genero, orientacao_sexual, raca, escolaridade, renda, regiao, 
-     conhecimento_prep, uso_prep, acesso_servico, comentarios)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+     conhecimento_prep, uso_prep, acesso_servico, fonte_info, barreiras, percepcao_risco, comentarios)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', tuple(resposta.values()))
     conn.commit()
     conn.close()
@@ -62,14 +65,10 @@ def carregar_dados_iniciais():
         # Carrega dados de usuários PrEP
         df_usuarios = pd.read_csv(data_path / 'Banco_PrEP_usuarios.csv', encoding='latin1', sep=',')
         
-        # Carrega e combina dados de dispensas
-        df_dispensas1 = pd.read_csv(data_path / 'Banco_PrEP_dispensas_1.csv', encoding='latin1', sep=',')
-        df_dispensas2 = pd.read_csv(data_path / 'Banco_PrEP_dispensas_2.csv', encoding='latin1', sep=',')
-        df_dispensas = pd.concat([df_dispensas1, df_dispensas2], ignore_index=True)
+        # Carrega o arquivo de dispensas único e grande
+        df_dispensas = pd.read_csv(data_path / 'Banco_PrEP_dispensas.csv', encoding='latin1', sep=',')
         
         # Carrega dados de indicadores de AIDS do Excel
-        # O arquivo Excel tem múltiplas tabelas, vamos carregar a planilha inteira
-        # e o usuário poderá visualizar as tabelas.
         df_indicadores = pd.read_excel(data_path / 'indicadoresAids.xls', sheet_name=None, header=None)
         
         return df_usuarios, df_dispensas, df_indicadores
@@ -77,8 +76,7 @@ def carregar_dados_iniciais():
         st.error(
             "Erro: Arquivos de dados não encontrados. "
             "Certifique-se de que a pasta 'data' existe e contém os arquivos: "
-            "'Banco_PrEP_usuarios.csv', 'Banco_PrEP_dispensas_1.csv', "
-            "'Banco_PrEP_dispensas_2.csv' e 'indicadoresAids.xls'."
+            "'Banco_PrEP_usuarios.csv', 'Banco_PrEP_dispensas.csv', e 'indicadoresAids.xls'."
         )
         return pd.DataFrame(), pd.DataFrame(), None
     except Exception as e:
@@ -115,7 +113,7 @@ def mostrar_termo_consentimento():
 def mostrar_pesquisa():
     """Exibe o formulário da pesquisa."""
     st.header("📝 Pesquisa - Conhecimento sobre PrEP/PEP")
-    st.markdown("Por favor, responda às perguntas abaixo. Suas respostas são anônimas.")
+    st.markdown("Por favor, responda às perguntas abaixo. Suas respostas são anônimas e muito importantes.")
 
     with st.form("formulario_pesquisa"):
         st.subheader("1. Perfil Demográfico")
@@ -125,11 +123,16 @@ def mostrar_pesquisa():
         escolaridade = st.selectbox("Qual seu nível de escolaridade?", ["Ensino Fundamental", "Ensino Médio", "Ensino Superior", "Pós-graduação"])
         renda = st.selectbox("Qual sua renda familiar mensal?", ["Até 1 salário mínimo", "De 1 a 3 salários", "De 3 a 5 salários", "Acima de 5 salários"])
 
-        st.subheader("2. Conhecimento e Uso da PrEP")
+        st.subheader("2. Conhecimento e Acesso à PrEP")
         conhecimento = st.radio("Você já ouviu falar sobre a PrEP (Profilaxia Pré-Exposição ao HIV)?", ["Sim, conheço bem", "Já ouvi falar, mas sei pouco", "Nunca ouvi falar"])
-        uso = st.radio("Você já fez uso da PrEP?", ["Sim, uso atualmente", "Já usei no passado", "Nunca usei, mas tenho interesse", "Nunca usei e não tenho interesse"])
+        fonte_info = st.selectbox("Onde você ouviu falar sobre PrEP pela primeira vez?", ["Profissional de saúde (médico, enfermeiro)", "Amigos ou parceiro(a)", "Redes sociais (Instagram, TikTok, etc.)", "Sites de notícias ou blogs", "Campanhas do governo", "Outro"])
         acesso = st.radio("Você sabe onde encontrar a PrEP gratuitamente pelo SUS?", ["Sim", "Não", "Tenho uma ideia, mas não tenho certeza"])
         
+        st.subheader("3. Uso e Percepções")
+        uso = st.radio("Você já fez uso da PrEP?", ["Sim, uso atualmente", "Já usei no passado", "Nunca usei, mas tenho interesse", "Nunca usei e não tenho interesse"])
+        barreiras = st.multiselect("Se você nunca usou ou parou de usar, qual foi o principal motivo? (Pode marcar mais de um)", ["Não acho que preciso", "Preocupação com efeitos colaterais", "Dificuldade de conseguir consulta ou receita", "Vergonha ou estigma", "Esqueço de tomar o remédio todo dia", "Não se aplica a mim"])
+        percepcao_risco = st.radio("Em sua opinião, qual o seu risco de se expor ao HIV hoje?", ["Alto", "Médio", "Baixo", "Nenhum", "Não sei avaliar"])
+
         comentarios = st.text_area("Se quiser, deixe um comentário, dúvida ou sugestão:")
 
         if st.form_submit_button("🚀 Enviar Minhas Respostas"):
@@ -137,6 +140,7 @@ def mostrar_pesquisa():
                 'idade': idade, 'genero': genero, 'orientacao_sexual': 'N/A', 'raca': raca,
                 'escolaridade': escolaridade, 'renda': renda, 'regiao': "Brasil",
                 'conhecimento_prep': conhecimento, 'uso_prep': uso, 'acesso_servico': acesso,
+                'fonte_info': fonte_info, 'barreiras': ", ".join(barreiras), 'percepcao_risco': percepcao_risco,
                 'comentarios': comentarios
             }
             salvar_resposta(resposta)
@@ -161,6 +165,7 @@ def analise_com_machine_learning():
     st.metric("Total de Respostas Coletadas", len(df_respostas))
 
     st.subheader("Recorte por Perfil Demográfico")
+    # ... (código dos gráficos demográficos existente permanece o mesmo) ...
     col1, col2 = st.columns(2)
     with col1:
         fig_idade = px.pie(df_respostas, names='idade', title='Distribuição por Idade', hole=.3)
@@ -175,7 +180,9 @@ def analise_com_machine_learning():
         fig_escolaridade = px.bar(df_respostas['escolaridade'].value_counts().reset_index(), x='escolaridade', y='count', title='Distribuição por Escolaridade', labels={'escolaridade': 'Escolaridade', 'count': 'Quantidade'})
         st.plotly_chart(fig_escolaridade, use_container_width=True)
 
+
     st.subheader("Análise sobre Conhecimento e Acesso à PrEP")
+    # ... (código dos gráficos de conhecimento existente permanece o mesmo) ...
     col1, col2 = st.columns(2)
     with col1:
         fig_conhecimento = px.pie(df_respostas, names='conhecimento_prep', title='Conhecimento sobre a PrEP', hole=.3)
@@ -184,11 +191,14 @@ def analise_com_machine_learning():
         fig_acesso = px.pie(df_respostas, names='acesso_servico', title='Sabe onde obter PrEP?', hole=.3)
         st.plotly_chart(fig_acesso, use_container_width=True)
 
-    st.subheader("Relatório de Uso da PrEP")
-    fig_uso = px.bar(df_respostas['uso_prep'].value_counts().reset_index(), 
-                     x='uso_prep', y='count', title='Uso da PrEP entre os Participantes',
-                     labels={'uso_prep': 'Uso da PrEP', 'count': 'Quantidade'})
-    st.plotly_chart(fig_uso, use_container_width=True)
+    st.subheader("Fontes de Informação e Percepção de Risco")
+    col3, col4 = st.columns(2)
+    with col3:
+        fig_fonte = px.bar(df_respostas['fonte_info'].value_counts().reset_index(), x='fonte_info', y='count', title='Principal Fonte de Informação sobre PrEP')
+        st.plotly_chart(fig_fonte, use_container_width=True)
+    with col4:
+        fig_risco = px.pie(df_respostas, names='percepcao_risco', title='Autopercepção de Risco de Exposição ao HIV', hole=.3)
+        st.plotly_chart(fig_risco, use_container_width=True)
     
     with st.expander("Ver dados brutos da pesquisa"):
         st.dataframe(df_respostas)
@@ -207,7 +217,6 @@ def mostrar_dados_oficiais():
     st.info("💡 Use o filtro abaixo para visualizar os dados de usuários e dispensas apenas do estado de São Paulo.")
     filtro_sp = st.toggle("Mostrar apenas dados de São Paulo (SP)", help="Ative para filtrar os dados da PrEP para o estado de SP.")
 
-    # Aplica o filtro se estiver ativado
     df_usuarios_filtrado = df_usuarios.copy()
     df_dispensas_filtrado = df_dispensas.copy()
 
@@ -239,8 +248,10 @@ def mostrar_dados_oficiais():
     with tab2:
         st.subheader("Histórico de Dispensas de PrEP")
         if not df_dispensas_filtrado.empty:
-            st.dataframe(df_dispensas_filtrado)
-            st.write("**Dispensas por Estado (UF)**")
+            st.info("A tabela abaixo exibe uma amostra das primeiras 100 linhas para garantir a performance do aplicativo. Os gráficos são calculados sobre o total de dados.")
+            st.dataframe(df_dispensas_filtrado.head(100)) # Mostra apenas uma amostra
+            
+            st.write("**Dispensas por Estado (UF) - (Gráfico com dados completos)**")
             st.bar_chart(df_dispensas_filtrado['UF_UDM'].value_counts())
         else:
             st.warning("Não foram encontrados dados de dispensas para a seleção atual.")
@@ -249,10 +260,8 @@ def mostrar_dados_oficiais():
         st.subheader("Indicadores de HIV/AIDS (Ministério da Saúde)")
         if df_indicadores:
             st.info("Estes são os dados extraídos do arquivo 'indicadoresAids.xls'. As tabelas são apresentadas como foram lidas. O filtro de estado não se aplica a esta seção.")
-            # O arquivo excel não tem formato de tabela padrão, então exibimos as planilhas
             for sheet_name, df_sheet in df_indicadores.items():
                 with st.expander(f"Visualizar Tabela: {sheet_name}"):
-                    # Limpando linhas e colunas vazias para melhor visualização
                     df_cleaned = df_sheet.dropna(how='all').dropna(axis=1, how='all')
                     st.dataframe(df_cleaned)
         else:
