@@ -38,12 +38,11 @@ def mostrar_dados_oficiais():
         st.warning("Dados não carregados")
         return
 
-    # Aplicar traduções
     df_usuarios_traduzido = traduzir_colunas(df_usuarios)
     
     st.info("💡 Dados públicos do Ministério da Saúde sobre usuários de PrEP")
     
-    tab1, tab2, tab3 = st.tabs(["👤 Perfil dos Usuários", "💊 Dispensas", "📈 Indicadores HIV"])
+    tab1, tab2, tab3, tab4 = st.tabs(["👤 Perfil dos Usuários", "💊 Dispensas", "📈 Tendências", "🔍 Análises Avançadas"])
     
     with tab1:
         col1, col2 = st.columns(2)
@@ -71,12 +70,37 @@ def mostrar_dados_oficiais():
 
     with tab2:
         if not df_dispensas.empty:
-            st.write("Dados de dispensas de medicamentos PrEP")
-            # Adicionar gráficos de dispensas aqui
+            st.subheader("Dispensas de PrEP ao Longo do Tempo")
+            df_dispensas['dt_disp'] = pd.to_datetime(df_dispensas['dt_disp'], errors='coerce')
+            disp_por_mes = df_dispensas.set_index('dt_disp').resample('M').size().reset_index(name='count')
+            fig_tempo = px.line(disp_por_mes, x='dt_disp', y='count', 
+                              title='Evolução Mensal das Dispensas de PrEP')
+            st.plotly_chart(fig_tempo, use_container_width=True)
+            
+            st.subheader("Tipos de Serviços")
+            col1, col2 = st.columns(2)
+            with col1:
+                fig_serv = px.pie(df_dispensas, names='tp_servico_atendimento', 
+                                title="Tipo de Serviço")
+                st.plotly_chart(fig_serv, use_container_width=True)
+            with col2:
+                fig_prof = px.pie(df_dispensas, names='tp_profissional', 
+                                title="Tipo de Profissional")
+                st.plotly_chart(fig_prof, use_container_width=True)
 
     with tab3:
-        if df_indicadores:
-            st.write("Indicadores nacionais de HIV/AIDS")
-            # Adicionar análise dos indicadores aqui
+        st.subheader("Análises de Tendência")
+        st.info("Em breve: Análises de tendência temporal e projeções")
 
-# (Copiar funções de machine learning do código original aqui)
+    with tab4:
+        st.subheader("Análises Avançadas com Machine Learning")
+        analise_avancada_publico(df_usuarios)
+
+def analise_avancada_publico(df_usuarios):
+    st.header("🤖 Análise Avançada com Machine Learning")
+    st.info("Esta análise utiliza os dados públicos para identificar padrões.")
+    st.warning("Funcionalidade em desenvolvimento - Machine Learning em breve!")
+
+def analise_indicadores_hiv(df_indicadores):
+    st.header("📈 Indicadores Nacionais de AIDS")
+    st.warning("Análise de indicadores de HIV em desenvolvimento!")
