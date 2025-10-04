@@ -1,14 +1,8 @@
 streamlit
 pandas
 plotly
-requests
+mysql-connector-python
 scikit-learn
-statsmodels
-supabase==2.6.0
-python-dotenv==1.0.1
-numpy
-matplotlib
-seaborn
 openpyxl
 xlrd
-plotly
+numpy
