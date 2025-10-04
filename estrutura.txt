@@ -1,0 +1,18 @@
+.
+├── analysis.py
+├── app.py
+├── data
+│   ├── Banco_PrEP_dispensas.csv
+│   ├── Banco_PrEP_dispensas_1.csv
+│   ├── Banco_PrEP_dispensas_2.csv
+│   ├── Banco_PrEP_usuarios.csv
+│   ├── indicadoresAids.xls
+│   └── prep_research.db
+├── estrutura.txt
+├── mostrar pesquisa
+├── pesquisa_prep.db
+├── requirements.txt
+├── termo_consentimento.md
+└── ui_pages.py
+
+2 directories, 14 files
