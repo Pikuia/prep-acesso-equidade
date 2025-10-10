@@ -141,6 +141,21 @@ def mostrar_pesquisa():
                 'comentarios': comentarios
             }
             salvar_resposta(resposta)
+            st.session_state.pesquisa_enviada = True
+            st.success("Obrigado por participar! Agora você pode acessar as demais informações.")
+            # Tenta forçar um rerun: prefira a API estável `st.rerun()` se disponível,
+            # senão tenta `experimental_rerun`. Se nenhuma estiver disponível, apenas retorna
+            try:
+                if hasattr(st, "rerun") and callable(getattr(st, "rerun")):
+                    st.rerun()
+                else:
+                    rerun = getattr(st, "experimental_rerun", None)
+                    if callable(rerun):
+                        rerun()
+                    else:
+                        return
+            except Exception:
+                return
 
 def mostrar_analise_pesquisa():
     st.header("🤖 Análise dos Dados da Pesquisa")
