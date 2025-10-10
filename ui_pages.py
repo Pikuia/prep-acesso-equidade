@@ -62,19 +62,15 @@ def mostrar_pesquisa():
             "Uso atualmente", "Já usei", "Nunca usei mas quero",
             "Nunca usei e não quero", "Não sei se preciso"
         ])
-        
+
         # Pergunta condicional sobre efeitos colaterais
         efeitos_colaterais_teve = "Não se aplica"
         efeitos_colaterais_quais = []
-        
+
         if uso in ["Uso atualmente", "Já usei"]:
-            efeitos_colaterais_teve = st.radio("Teve efeitos colaterais?", 
-                ["Não", "Sim", "Não tenho certeza"])
+            efeitos_colaterais_teve = st.radio("Teve efeitos colaterais?", ["Não", "Sim", "Não tenho certeza"])
             if efeitos_colaterais_teve == "Sim":
-                efeitos_colaterais_quais = st.multiselect("Quais efeitos?", [
-                    "Náusea", "Dor de cabeça", "Diarreia", "Tontura", 
-                    "Cansaço", "Outro"
-                ])
+                efeitos_colaterais_quais = st.text_area("Qual/quais efeitos colaterais?")
 
         barreiras = st.multiselect("Barreiras para usar PrEP:", [
             "Não acho que preciso", "Medo de efeitos", "Dificuldade de acesso",
@@ -163,20 +159,23 @@ def mostrar_onde_encontrar():
     """Exibe informações sobre onde encontrar a PrEP."""
     st.header("📍 Onde Encontrar a PrEP?")
     st.markdown("---")
-    
+
     st.info("""
     A PrEP é disponibilizada gratuitamente pelo SUS em diversos serviços de saúde. 
     Consulte a Secretaria de Saúde do seu município para encontrar o local mais próximo.
+    Veja abaixo a lista completa de locais cadastrados no Brasil.
     """)
-    
-    st.subheader("Principais locais em São Paulo:")
-    st.write("""
-    - **CRT DST/Aids-SP** - Centro de Referência e Treinamento
-    - **UBSs** - Unidades Básicas de Saúde
-    - **SAEs** - Serviços de Assistência Especializada
-    - **CTAs** - Centros de Testagem e Aconselhamento
-    """)
-    
+
+    # Exibir todos os locais do arquivo CSV
+    import pandas as pd
+    locais_path = "data/locais_prep.csv"
+    try:
+        df_locais = pd.read_csv(locais_path)
+        st.subheader("Todos os Locais de PrEP no Brasil:")
+        st.dataframe(df_locais, use_container_width=True)
+    except Exception as e:
+        st.error(f"Erro ao carregar locais: {e}")
+
     st.subheader("Como acessar:")
     st.write("""
     1. Procure uma unidade de saúde

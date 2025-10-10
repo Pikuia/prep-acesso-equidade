@@ -7,40 +7,89 @@ from analysis import carregar_dados_publicos
 
 def mostrar_pagina_comparativa():
     st.header("🔬 Comparação: Pesquisa vs Dados Oficiais")
-    
+
     df_pesquisa = buscar_respostas()
     df_publico, _, _ = carregar_dados_publicos()
-    
+
     if df_pesquisa.empty or df_publico.empty:
         st.warning("Precisa de dados da pesquisa e públicos para comparar")
         return
 
     # Filtrar dados públicos para SP
     df_publico_sp = df_publico[df_publico['UF_UDM'] == 'SP'].copy()
-    
+    df_publico_sp = df_publico_sp.rename(columns={
+        'raca4_cat': 'raca',
+        'fetar': 'idade',
+        'Pop_genero_pratica': 'genero',
+        'escol4': 'escolaridade',
+        'renda': 'renda',
+        'UF_UDM': 'regiao'
+    })
+
+    def comparar_coluna(col_pesquisa, col_publico, titulo, rotulo):
+        dist_pesquisa = df_pesquisa[col_pesquisa].value_counts(normalize=True).reset_index()
+        dist_pesquisa.columns = [rotulo, 'percentual']
+        dist_pesquisa['fonte'] = 'Nossa Pesquisa'
+
+        dist_publico = df_publico_sp[col_publico].value_counts(normalize=True).reset_index()
+        dist_publico.columns = [rotulo, 'percentual']
+        dist_publico['fonte'] = 'Dados Oficiais (SP)'
+
+        df_comparativo = pd.concat([dist_pesquisa, dist_publico])
+        fig = px.bar(df_comparativo, x=rotulo, y='percentual', color='fonte',
+                     barmode='group', title=titulo,
+                     labels={'percentual': 'Percentual', rotulo: rotulo})
+        st.plotly_chart(fig, use_container_width=True)
+
     st.subheader("Comparativo por Raça/Cor")
-    
-    # Preparar dados da pesquisa
-    dist_pesquisa = df_pesquisa['raca'].value_counts(normalize=True).reset_index()
-    dist_pesquisa.columns = ['raca', 'percentual']
-    dist_pesquisa['fonte'] = 'Nossa Pesquisa'
-    
-    # Preparar dados públicos
-    df_publico_sp.rename(columns={'raca4_cat': 'raca'}, inplace=True)
-    dist_publico = df_publico_sp['raca'].value_counts(normalize=True).reset_index()
-    dist_publico.columns = ['raca', 'percentual']
-    dist_publico['fonte'] = 'Dados Oficiais (SP)'
-    
-    # Combinar
-    df_comparativo = pd.concat([dist_pesquisa, dist_publico])
-    
-    # Gráfico
-    fig = px.bar(df_comparativo, x='raca', y='percentual', color='fonte',
-                 barmode='group', title='Distribuição por Raça/Cor',
-                 labels={'percentual': 'Percentual', 'raca': 'Raça/Cor'})
-    st.plotly_chart(fig, use_container_width=True)
-    
-    st.info("""
-    **Interpretação:** Compare as barras para ver se o perfil dos respondentes 
-    da pesquisa é similar ao perfil geral dos usuários de PrEP em São Paulo.
-    """)
+    comparar_coluna('raca', 'raca', 'Distribuição por Raça/Cor', 'Raça/Cor')
+
+    st.subheader("Comparativo por Faixa Etária")
+    comparar_coluna('idade', 'idade', 'Distribuição por Faixa Etária', 'Faixa Etária')
+
+    st.subheader("Comparativo por Gênero")
+    comparar_coluna('genero', 'genero', 'Distribuição por Gênero', 'Gênero')
+
+    st.subheader("Comparativo por Escolaridade")
+    comparar_coluna('escolaridade', 'escolaridade', 'Distribuição por Escolaridade', 'Escolaridade')
+
+    # Renda e Região podem não existir nos dados oficiais, mas tentamos
+    if 'renda' in df_pesquisa.columns and 'renda' in df_publico_sp.columns:
+        st.subheader("Comparativo por Renda")
+        comparar_coluna('renda', 'renda', 'Distribuição por Renda', 'Renda')
+
+    if 'regiao' in df_pesquisa.columns and 'regiao' in df_publico_sp.columns:
+        st.subheader("Comparativo por Região")
+        comparar_coluna('regiao', 'regiao', 'Distribuição por Região', 'Região')
+
+    # Dados exclusivos da pesquisa
+    def comparar_pesquisa(col, titulo, rotulo):
+        dist = df_pesquisa[col].value_counts(normalize=True).reset_index()
+        dist.columns = [rotulo, 'percentual']
+        fig = px.bar(dist, x=rotulo, y='percentual', title=titulo,
+                     labels={'percentual': 'Percentual', rotulo: rotulo})
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.subheader("Conhecimento sobre PrEP (Pesquisa)")
+    comparar_pesquisa('conhecimento_prep', 'Conhecimento sobre PrEP', 'Conhecimento PrEP')
+
+    st.subheader("Uso de PrEP (Pesquisa)")
+    comparar_pesquisa('uso_prep', 'Uso de PrEP', 'Uso PrEP')
+
+    st.subheader("Barreiras para uso de PrEP (Pesquisa)")
+    comparar_pesquisa('barreiras', 'Barreiras para uso de PrEP', 'Barreiras')
+
+    st.subheader("Percepção de risco de HIV (Pesquisa)")
+    comparar_pesquisa('percepcao_risco', 'Percepção de risco de HIV', 'Percepção de Risco')
+
+    st.subheader("Efeitos colaterais (Pesquisa)")
+    comparar_pesquisa('efeitos_colaterais_teve', 'Efeitos colaterais', 'Efeitos Colaterais')
+
+    st.subheader("Efeitos colaterais - quais (Pesquisa)")
+    comparar_pesquisa('efeitos_colaterais_quais', 'Quais efeitos colaterais', 'Efeitos Colaterais Quais')
+
+    st.subheader("Comentários (Pesquisa)")
+    if 'comentarios' in df_pesquisa.columns:
+        st.write("Exemplo de comentários recebidos:")
+        for c in df_pesquisa['comentarios'].dropna().head(5):
+            st.info(c)
