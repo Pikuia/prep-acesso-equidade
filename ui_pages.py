@@ -110,6 +110,12 @@ def mostrar_pesquisa():
         comentarios = st.text_area("Comentários ou dúvidas:")
 
         if st.form_submit_button("🚀 Enviar Respostas"):
+            # Garantir que efeitos_colaterais_quais seja sempre string
+            ec_quais = efeitos_colaterais_quais
+            if isinstance(ec_quais, list):
+                ec_quais = ", ".join(ec_quais)
+            elif ec_quais is None:
+                ec_quais = ""
             resposta = {
                 'idade': idade,
                 'genero': genero,
@@ -127,7 +133,7 @@ def mostrar_pesquisa():
                 'barreiras': ", ".join(barreiras),
                 'percepcao_risco': percepcao_risco,
                 'efeitos_colaterais_teve': efeitos_colaterais_teve,
-                'efeitos_colaterais_quais': efeitos_colaterais_quais,
+                'efeitos_colaterais_quais': ec_quais,
                 'comentarios': comentarios
             }
             salvar_resposta(resposta)

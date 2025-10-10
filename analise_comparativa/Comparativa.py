@@ -16,6 +16,14 @@ def mostrar_pagina_comparativa():
         st.warning("Precisa de dados da pesquisa e públicos para comparar")
         return
 
+    # Função para comparar dados exclusivos da pesquisa
+    def comparar_pesquisa(col, titulo, rotulo):
+        dist = df_pesquisa[col].value_counts(normalize=True).reset_index()
+        dist.columns = [rotulo, 'percentual']
+        fig = px.bar(dist, x=rotulo, y='percentual', title=titulo,
+                     labels={'percentual': 'Percentual', rotulo: rotulo})
+        st.plotly_chart(fig, use_container_width=True)
+
     # Novos campos exclusivos da pesquisa
     if 'status_relacional' in df_pesquisa.columns:
         st.subheader("Status Relacional (Pesquisa)")

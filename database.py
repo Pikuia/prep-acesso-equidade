@@ -18,8 +18,10 @@ def criar_tabela_respostas():
         escolaridade TEXT,
         renda TEXT,
         regiao TEXT,
+        status_relacional TEXT,
         conhecimento_prep TEXT,
         uso_prep TEXT,
+        objetivo_prep TEXT,
         acesso_servico TEXT,
         fonte_info TEXT,
         barreiras TEXT,
@@ -38,10 +40,10 @@ def salvar_resposta(resposta):
     cursor = conn.cursor()
     cursor.execute('''
     INSERT INTO respostas 
-    (idade, genero, orientacao_sexual, raca, escolaridade, renda, regiao, 
-     conhecimento_prep, uso_prep, acesso_servico, fonte_info, barreiras, 
+    (idade, genero, orientacao_sexual, raca, escolaridade, renda, regiao, status_relacional,
+     conhecimento_prep, uso_prep, objetivo_prep, acesso_servico, fonte_info, barreiras, 
      percepcao_risco, efeitos_colaterais_teve, efeitos_colaterais_quais, comentarios)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', tuple(resposta.values()))
     conn.commit()
     conn.close()
