@@ -76,8 +76,12 @@ def mostrar_pesquisa():
         
         st.subheader("3. Uso e Percepções")
         uso = st.selectbox("Você usa ou já usou PrEP?", [
-            "Uso atualmente", "Já usei", "Nunca usei mas quero",
-            "Nunca usei e não quero", "Não sei se preciso"
+            "Uso atualmente",
+            "Já usei",
+            "Nunca usei mas quero",
+            "Nunca usei e não quero",
+            "Nunca usei",
+            "Não sei se preciso"
         ])
 
         objetivo_prep = st.selectbox("Objetivo do uso da PrEP:", [
