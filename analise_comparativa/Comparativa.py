@@ -6,14 +6,24 @@ from database import buscar_respostas
 from analysis import carregar_dados_publicos
 
 def mostrar_pagina_comparativa():
+
     st.header("🔬 Comparação: Pesquisa vs Dados Oficiais")
 
     df_pesquisa = buscar_respostas()
     df_publico, _, _ = carregar_dados_publicos()
 
-    if df_pesquisa.empty or df_publico.empty:
+    if df_pesquisa is None or df_publico is None or df_pesquisa.empty or df_publico.empty:
         st.warning("Precisa de dados da pesquisa e públicos para comparar")
         return
+
+    # Novos campos exclusivos da pesquisa
+    if 'status_relacional' in df_pesquisa.columns:
+        st.subheader("Status Relacional (Pesquisa)")
+        comparar_pesquisa('status_relacional', 'Status Relacional', 'Status Relacional')
+
+    if 'objetivo_prep' in df_pesquisa.columns:
+        st.subheader("Objetivo do uso da PrEP (Pesquisa)")
+        comparar_pesquisa('objetivo_prep', 'Objetivo do uso da PrEP', 'Objetivo PrEP')
 
     # Filtrar dados públicos para SP
     df_publico_sp = df_publico[df_publico['UF_UDM'] == 'SP'].copy()
