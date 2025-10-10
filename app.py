@@ -32,34 +32,27 @@ def main():
         mostrar_termo_consentimento()
         return
 
+    if 'pesquisa_enviada' not in st.session_state:
+        st.session_state.pesquisa_enviada = False
+
+    if not st.session_state.pesquisa_enviada:
+        mostrar_pesquisa()
+        # A função mostrar_pesquisa define st.session_state.pesquisa_enviada = True após envio
+        return
+
     st.sidebar.success("Termo aceito! ✅")
     st.sidebar.title("Navegação")
-    
     menu = st.sidebar.radio("Seções:", [
-        "🏠 Início", "📝 Pesquisa", "🤖 Análise da Pesquisa",
-        "📊 Dados Oficiais", "🔬 Análise Comparativa", "❔ Dúvidas", "📍 Onde Encontrar"
+        "🤖 Análise da Pesquisa",
+        "📊 Dados Oficiais",
+        "🔬 Análise Comparativa",
+        "❔ Dúvidas",
+        "📍 Onde Encontrar"
     ])
 
     criar_tabela_respostas()
 
-    if menu == "🏠 Início":
-        st.title("❤️ Plataforma de Pesquisa sobre PrEP")
-        st.markdown("""
-        Bem-vindo(a) à plataforma do nosso Projeto Integrador! 
-        Esta ferramenta coleta e analisa dados sobre conhecimento e acesso à PrEP no Brasil.
-        
-        ### Funcionalidades:
-        - **📝 Pesquisa**: Questionário anônimo sobre PrEP (5 minutos)
-        - **🤖 Análise**: Resultados em tempo real da pesquisa
-        - **� Dados Oficiais**: Dados públicos do Ministério da Saúde
-        - **🔬 Comparativa**: Compare dados da pesquisa com oficiais
-        - **❔ Dúvidas**: Tire suas dúvidas sobre PrEP
-        - **📍 Onde Encontrar**: Locais de atendimento em SP
-        """)
-
-    elif menu == "📝 Pesquisa":
-        mostrar_pesquisa()
-    elif menu == "🤖 Análise da Pesquisa":
+    if menu == "🤖 Análise da Pesquisa":
         mostrar_analise_pesquisa()
     elif menu == "📊 Dados Oficiais":
         mostrar_dados_oficiais()
