@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
 from database import criar_tabela_respostas
-from ui_pages import mostrar_pesquisa, mostrar_analise_pesquisa, mostrar_duvidas_frequentes, mostrar_onde_encontrar
+from ui_pages import mostrar_pesquisa, mostrar_analise_pesquisa, mostrar_duvidas_frequentes, mostrar_onde_encontrar, mostrar_admin_backups
 from analysis import mostrar_dados_oficiais
 from analise_comparativa.Comparativa import mostrar_pagina_comparativa
 
@@ -47,7 +47,8 @@ def main():
         "📊 Dados Oficiais",
         "🔬 Análise Comparativa",
         "❔ Dúvidas",
-        "📍 Onde Encontrar"
+        "📍 Onde Encontrar",
+        "🔧 Admin Backups"
     ])
 
     criar_tabela_respostas()
@@ -62,6 +63,8 @@ def main():
         mostrar_duvidas_frequentes()
     elif menu == "📍 Onde Encontrar":
         mostrar_onde_encontrar()
+    elif menu == "🔧 Admin Backups":
+        mostrar_admin_backups()
 
 if __name__ == "__main__":
     main()

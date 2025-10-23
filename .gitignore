@@ -1,0 +1,32 @@
+# Arquivos de dados sensíveis
+pesquisa_prep.db
+respostas_emergencia.csv
+
+# Backups (muito grandes para GitHub)
+backups/
+csv_backups/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+monitor_log.txt
+
+# Arquivos temporários
+*.tmp
+*.temp
+*_backup.sh
+
+# VS Code
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente
+.env
+.env.local

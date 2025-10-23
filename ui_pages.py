@@ -388,3 +388,144 @@ def mostrar_onde_encontrar():
     4. Receba a prescrição médica
     5. Retire os medicamentos na farmácia do SUS
     """)
+
+def mostrar_admin_backups():
+    """Página administrativa para gerenciar backups"""
+    st.header("🔧 Administração de Backups")
+    st.markdown("*Esta seção é para administradores gerenciarem os backups das respostas.*")
+    
+    # Verificação de senha simples (pode ser melhorada)
+    senha_admin = st.text_input("Senha de Administrador:", type="password")
+    
+    if senha_admin == "prep2025admin":  # Senha simples - pode ser alterada
+        from backup_manager import BackupManager
+        import os
+        
+        backup_manager = BackupManager()
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            if st.button("📊 Status Atual"):
+                count = backup_manager.contar_respostas()
+                st.metric("Total de Respostas", count)
+                
+                # Verificar se existem arquivos de emergência
+                if os.path.exists('respostas_emergencia.csv'):
+                    emergency_df = pd.read_csv('respostas_emergencia.csv')
+                    st.metric("Respostas de Emergência", len(emergency_df))
+                else:
+                    st.metric("Respostas de Emergência", 0)
+        
+        with col2:
+            if st.button("💾 Criar Backup Manual"):
+                resultado = backup_manager.backup_completo()
+                st.success("Backup criado com sucesso!")
+                st.json(resultado)
+        
+        with col3:
+            if st.button("📋 Listar Backups"):
+                backups = backup_manager.listar_backups()
+                st.subheader("Backups Disponíveis:")
+                st.write("**Bancos de Dados:**")
+                for backup in backups['db_backups']:
+                    st.write(f"- {backup}")
+                st.write("**Arquivos CSV/JSON:**")
+                for backup in backups['csv_backups']:
+                    st.write(f"- {backup}")
+        
+        st.subheader("📥 Exportar Dados")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.button("📄 Exportar CSV Atual"):
+                csv_path = backup_manager.exportar_csv()
+                if csv_path:
+                    st.success(f"CSV exportado: {os.path.basename(csv_path)}")
+                    
+                    # Permitir download
+                    df = pd.read_sql("SELECT * FROM respostas", sqlite3.connect('pesquisa_prep.db'))
+                    csv = df.to_csv(index=False)
+                    st.download_button(
+                        label="⬇️ Download CSV",
+                        data=csv,
+                        file_name=f"respostas_prep_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                        mime="text/csv"
+                    )
+        
+        with col2:
+            if st.button("📋 Exportar JSON Atual"):
+                json_path = backup_manager.exportar_json()
+                if json_path:
+                    st.success(f"JSON exportado: {os.path.basename(json_path)}")
+                    
+                    # Permitir download
+                    df = pd.read_sql("SELECT * FROM respostas", sqlite3.connect('pesquisa_prep.db'))
+                    json_data = df.to_json(orient='records', date_format='iso', indent=2)
+                    st.download_button(
+                        label="⬇️ Download JSON",
+                        data=json_data,
+                        file_name=f"respostas_prep_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json",
+                        mime="application/json"
+                    )
+        
+        st.subheader("🔄 Recuperação de Emergência")
+        
+        if os.path.exists('respostas_emergencia.csv'):
+            st.warning("⚠️ Arquivo de emergência encontrado!")
+            if st.button("🔄 Importar Respostas de Emergência"):
+                try:
+                    emergency_df = pd.read_csv('respostas_emergencia.csv')
+                    
+                    # Conectar ao banco e importar
+                    conn = sqlite3.connect('pesquisa_prep.db')
+                    
+                    for _, row in emergency_df.iterrows():
+                        # Remover timestamp se existir
+                        row_dict = row.to_dict()
+                        if 'timestamp' in row_dict:
+                            del row_dict['timestamp']
+                        
+                        # Inserir no banco
+                        cursor = conn.cursor()
+                        cursor.execute('''
+                        INSERT INTO respostas 
+                        (idade, genero, orientacao_sexual, raca, escolaridade, renda, regiao, status_relacional,
+                         conhecimento_prep, uso_prep, objetivo_prep, acesso_servico, fonte_info, barreiras, 
+                         percepcao_risco, efeitos_colaterais_teve, efeitos_colaterais_quais, comentarios)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ''', tuple(row_dict.values()))
+                    
+                    conn.commit()
+                    conn.close()
+                    
+                    # Renomear arquivo de emergência
+                    os.rename('respostas_emergencia.csv', f'respostas_emergencia_importado_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv')
+                    
+                    st.success(f"✅ {len(emergency_df)} respostas de emergência importadas com sucesso!")
+                    st.rerun()
+                    
+                except Exception as e:
+                    st.error(f"Erro ao importar: {e}")
+        
+        # Log de backups
+        if os.path.exists('backups/backup_log.json'):
+            st.subheader("📜 Histórico de Backups")
+            with open('backups/backup_log.json', 'r') as f:
+                import json
+                logs = json.load(f)
+                
+            # Mostrar últimos 5 backups
+            for log in logs[-5:]:
+                with st.expander(f"Backup {log['timestamp']}"):
+                    st.json(log)
+    
+    elif senha_admin:
+        st.error("Senha incorreta!")
+    
+    else:
+        st.info("Digite a senha de administrador para acessar os controles de backup.")
+
+import sqlite3
+from datetime import datetime
