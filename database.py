@@ -6,6 +6,35 @@ import os
 from datetime import datetime
 from backup_manager import BackupManager
 
+def carregar_dados_iniciais():
+    """Carrega dados iniciais do CSV se o banco estiver vazio"""
+    try:
+        conn = sqlite3.connect('pesquisa_prep.db')
+        cursor = conn.cursor()
+        
+        # Verificar se já existem respostas
+        cursor.execute("SELECT COUNT(*) FROM respostas")
+        count = cursor.fetchone()[0]
+        
+        # Se não existem respostas e existe arquivo CSV, carregar dados
+        if count == 0 and os.path.exists('dados_iniciais.csv'):
+            df = pd.read_csv('dados_iniciais.csv')
+            
+            # Remover colunas id e data_envio do CSV (serão geradas automaticamente)
+            if 'id' in df.columns:
+                df = df.drop('id', axis=1)
+            if 'data_envio' in df.columns:
+                df = df.drop('data_envio', axis=1)
+            
+            # Inserir dados no banco
+            df.to_sql('respostas', conn, if_exists='append', index=False)
+            st.success(f"✅ {len(df)} respostas iniciais carregadas do arquivo de dados!")
+            
+        conn.close()
+        
+    except Exception as e:
+        st.error(f"Erro ao carregar dados iniciais: {e}")
+
 def criar_tabela_respostas():
     """Cria a tabela de respostas usando SQLite"""
     conn = sqlite3.connect('pesquisa_prep.db')
@@ -36,6 +65,9 @@ def criar_tabela_respostas():
     ''')
     conn.commit()
     conn.close()
+    
+    # Carregar dados iniciais se necessário
+    carregar_dados_iniciais()
 
 def salvar_resposta(resposta):
     """Salva uma resposta no SQLite com backup automático"""
